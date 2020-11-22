@@ -6,6 +6,33 @@ $(document).ready(onReady);
 function onReady() {
     console.log('jquery sourced and loaded!');
     getTasks();
+    $('#submitBtn').on('click', handleSubmit);
+}
+
+// prevents default form attributes, gets input value into an object and passes it to addTask
+function handleSubmit(event) {
+    event.preventDefault();
+    console.log('click on addTask button!');
+    let newTask = {
+        description: $('#task-in').val(),
+    };
+    $('#task-in').val('');
+    addTask(newTask);
+}
+
+// POST request to server with task object as data, calls getTasks to refresh list after response
+function addTask(taskToAdd) {
+    $.ajax({
+        method: 'POST',
+        url: '/tasks',
+        data: taskToAdd
+    }).then( response => {
+        console.log('Response from server', response);
+        getTasks();
+    }).catch( err => {
+        console.log('error in adding task', err);
+        alert('Unable to add task right now, please try again later.');
+    })
 }
 
 // function to send GET request to server, gets response of all tasks
@@ -24,6 +51,8 @@ function getTasks() {
 
 // function to append all tasks from database to DOM
 function renderTaskList(taskList) {
+    $('#taskList').empty();
+    
     for (let task of taskList) {
         $('#taskList').append(`
         <tr>
@@ -33,6 +62,7 @@ function renderTaskList(taskList) {
         `);
     }
 }
+
 
 
 

@@ -12,7 +12,19 @@ router.get('/', (req, res) => {
         console.log('error in database get', err);
         res.sendStatus(500);
     })
-})
+});
+
+router.post('/', (req, res) => {
+    let task = req.body;
+    console.log('adding new task of:', task.description);
+    const queryText = `INSERT INTO "tasks" ("taskInfo") VALUES ($1);`;
+    pool.query(queryText, [task.description]).then( result => {
+        res.sendStatus(201);
+    }).catch( err => {
+        console.log('error in adding task to database', err);
+        res.sendStatus(500);
+    })
+});
 
 
 
