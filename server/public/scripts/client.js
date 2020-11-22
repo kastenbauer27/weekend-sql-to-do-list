@@ -55,9 +55,10 @@ function renderTaskList(taskList) {
     
     for (let task of taskList) {
         $('#taskList').append(`
-        <tr>
+        <tr data-id=${task.id}>
         <td>${task.taskInfo}</td>
-        <td>${task.complete}</td>
+        <td><input type="checkbox" class="markComplete"></input></td>
+        <td><button class="deleteBtn">Delete</button></td>
         </tr>
         `);
     }
