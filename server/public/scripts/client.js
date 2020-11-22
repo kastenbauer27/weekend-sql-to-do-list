@@ -7,6 +7,23 @@ function onReady() {
     console.log('jquery sourced and loaded!');
     getTasks();
     $('#submitBtn').on('click', handleSubmit);
+    $('#taskList').on('click', '.deleteBtn', function(event) {
+        let taskId = $(this).closest('tr').data('id');
+        console.log('clicked delete button for task with id:', taskId);
+        removeTask(taskId);
+    });
+}
+
+function removeTask(idToRemove) {
+    $.ajax({
+        method: 'DELETE',
+        url: `/tasks/${idToRemove}`
+    }).then( response => {
+        getTasks();
+    }).catch( err => {
+        console.log('error in delete', err);
+        alert('Unable to delete task, please try again later.')
+    })
 }
 
 // prevents default form attributes, gets input value into an object and passes it to addTask
