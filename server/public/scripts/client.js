@@ -14,6 +14,7 @@ function onReady() {
     });
 }
 
+// called after clicking delete button, removes a task from database and refreshes DOM
 function removeTask(idToRemove) {
     $.ajax({
         method: 'DELETE',
@@ -23,7 +24,7 @@ function removeTask(idToRemove) {
     }).catch( err => {
         console.log('error in delete', err);
         alert('Unable to delete task, please try again later.')
-    })
+    });
 }
 
 // prevents default form attributes, gets input value into an object and passes it to addTask
@@ -49,7 +50,7 @@ function addTask(taskToAdd) {
     }).catch( err => {
         console.log('error in adding task', err);
         alert('Unable to add task right now, please try again later.');
-    })
+    });
 }
 
 // function to send GET request to server, gets response of all tasks
@@ -73,7 +74,7 @@ function renderTaskList(taskList) {
     for (let task of taskList) {
         $('#taskList').append(`
         <tr data-id=${task.id}>
-        <td>${task.taskInfo}</td>
+        <td class="info">${task.taskInfo}</td>
         <td><input type="checkbox" class="markComplete"></input></td>
         <td><button class="deleteBtn">Delete</button></td>
         </tr>
