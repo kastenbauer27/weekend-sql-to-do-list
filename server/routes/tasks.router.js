@@ -3,7 +3,7 @@ const router = express.Router();
 const pool = require('../modules/pool');
 
 router.get('/', (req, res) => {
-    const queryText = `SELECT * FROM tasks ORDER BY id;`;
+    const queryText = `SELECT * FROM "tasks" ORDER BY "id";`;
     pool.query(queryText).then( result => {
         console.log('Here are all the tasks', result);
         let taskList = result.rows;
@@ -29,7 +29,21 @@ router.post('/', (req, res) => {
 router.delete('/:id', (req, res) => {
     let id = req.params.id;
     console.log(`Ready to delete task of id=${id}`);
-    const queryText = `DELETE FROM tasks WHERE id=$1;`;
+    const queryText = `DELETE FROM "tasks" WHERE id=$1;`;
+    pool.query(queryText, [id])
+    .then( result => {   
+        res.sendStatus(200);
+    })
+    .catch( err => {
+        console.log('error from db', err);
+        res.sendStatus(500);
+    })
+});
+
+router.put('/:id', (req, res) => {
+    let id = req.params.id;
+    console.log(`Ready to complete task of id=${id}`);
+    const queryText = `UPDATE "tasks" SET "complete" = 'true' WHERE id=$1;`;
     pool.query(queryText, [id])
     .then( result => {   
         res.sendStatus(200);

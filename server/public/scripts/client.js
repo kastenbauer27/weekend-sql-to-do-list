@@ -7,11 +7,38 @@ function onReady() {
     console.log('jquery sourced and loaded!');
     getTasks();
     $('#submitBtn').on('click', handleSubmit);
-    $('#taskList').on('click', '.deleteBtn', function(event) {
+    $('#taskList').on('check', '.deleteBtn', function(event) {
         let taskId = $(this).closest('tr').data('id');
         console.log('clicked delete button for task with id:', taskId);
         removeTask(taskId);
     });
+    $('#taskList').on('click', '.markComplete', function(event) {
+        event.preventDefault();
+        let task = $(this).closest('tr');
+        let taskId = task.data('id');
+        console.log('ready to complete task of id:', taskId);
+        completeTask(taskId);
+        toggleComplete(task);
+    });
+}
+
+function toggleComplete(row) {
+    row.toggleClass('complete');
+}
+
+function completeTask(idToComplete) {
+    console.log('completing task with id:', idToComplete);
+    $.ajax({
+        method: 'PUT',
+        url: `/tasks/${idToComplete}`
+      })
+      .then( response => {
+        getTasks();
+      })
+      .catch( err => {
+        console.log('ERROR', err);
+        alert('Unable to complete task, please try again later.');
+      });
 }
 
 // called after clicking delete button, removes a task from database and refreshes DOM
